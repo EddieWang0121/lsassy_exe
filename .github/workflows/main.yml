@@ -1,0 +1,41 @@
+name: Build Lsassy Windows Executable
+on:
+  workflow_dispatch: # This allows manual triggering
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          
+      - name: Install lsassy and dependencies
+        run: |
+          python -m pip install --upgrade pip
+          # Install explicit dependencies
+          pip install lsassy
+          # Install adidnsdump and its dependencies
+          pip install -e .
+          # Install PyInstaller
+          pip install pyinstaller
+          
+      - name: Build executable
+        run: |
+          # Create a simple entry point script
+          echo 'import sys; from lsassy.console import main; sys.exit(main())' > lsassy_launcher.py
+          # Use this entry script for PyInstaller
+          pyinstaller --onefile --name lsassy_windows_amd64.exe lsassy_launcher.py
+          
+      - name: Create zip file
+        run: |
+          Compress-Archive -Path .\\dist\\lsassy_windows_amd64.exe -DestinationPath lsassy_windows.zip
+          
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: lsassy-windows
+          path: lsassy_windows.zip 
