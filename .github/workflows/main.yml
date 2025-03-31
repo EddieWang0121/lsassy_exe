@@ -18,6 +18,7 @@ jobs:
           python -m pip install --upgrade pip
           # Install explicit dependencies
           pip install -r requirements.txt
+          pip install pycryptodomex unicrypto
           # Install lsassy and its dependencies
           pip install -e .
           # Install PyInstaller
