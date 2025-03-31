@@ -17,8 +17,11 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           # Install explicit dependencies
-          pip install lsassy
-          # Install adidnsdump and its dependencies
+          pip install impacket
+          pip install netaddr
+          pip install pypykatz
+          pip install rich
+          # Install lsassy and its dependencies
           pip install -e .
           # Install PyInstaller
           pip install pyinstaller
